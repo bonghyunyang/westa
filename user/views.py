@@ -16,9 +16,12 @@ class Signup(View):
 class Login(View):
     def post(self, request):
         data = json.loads(request.body)
-        user = User.objects.get(email = data['email'])
+
         if User.objects.filter(email = data['email']).exists(): 
+            user = User.objects.get(email = data['email'])
             if User.password == data['password']:
                 return JsonResponse({'message':'로그인이 되었습니다.'},status=200) 
-        else:
-            return JsonResponse({'message':'INVALID_USER'},status=401)
+            else:
+                return JsonResponse({'message':'INVALID_USER'},status=401)
+
+        return JsonResponse({'message':'등록되지 않은 이메일입니다.'}, status=401)
